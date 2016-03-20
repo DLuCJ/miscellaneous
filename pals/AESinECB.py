@@ -1,10 +1,12 @@
 def get_repetitions(bytes):
     score = 0
-    matchbytes = [bytes[i:i + 16] for i in range(len(bytes))]
+    seen = []
+    matchbytes = [bytes[i:i + 16] for i in range(0, len(bytes), 16)]
     for match in matchbytes:
-        for cand in matchbytes:
+        for cand in seen:
             if match == cand:
                 score += 1
+        seen.append(match)
     return score
 
 
@@ -19,6 +21,7 @@ def detect_ecb(lines, mod=0):
             scorez.append((scoreline(0, bs), line))
             continue
         scorez.append((get_repetitions(bs), line))
+    print(max(scorez, key=lambda item: item[0])[0])
     return max(scorez, key=lambda item: item[0])[1]
 
 
