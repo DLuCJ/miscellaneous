@@ -1,12 +1,15 @@
-def get_repetitions(bytes):
-    score = 0
-    seen = []
-    matchbytes = [bytes[i:i + 16] for i in range(0, len(bytes), 16)]
+def get_repetitions(bs):
+    matchbytes = [bs[i:i+8] for i in range(0, len(bs), 8)]
+    from collections import defaultdict
+    freqs = defaultdict(lambda: 0)
     for match in matchbytes:
-        for cand in seen:
-            if match == cand:
-                score += 1
-        seen.append(match)
+        freqs[match] += 1
+
+    score = 0
+    for key in freqs.keys():
+        if freqs[key] > 1:
+            score += freqs[key]
+
     return score
 
 
@@ -21,6 +24,7 @@ def detect_ecb(lines, mod=0):
             scorez.append((scoreline(0, bs), line))
             continue
         scorez.append((get_repetitions(bs), line))
+
     return max(scorez, key=lambda item: item[0])[1]
 
 
