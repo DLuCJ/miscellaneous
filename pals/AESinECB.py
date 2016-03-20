@@ -1,6 +1,11 @@
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+from xorgalor import scoreline
+from collections import defaultdict
+
+
 def get_repetitions(bs):
-    matchbytes = [bs[i:i+8] for i in range(0, len(bs), 8)]
-    from collections import defaultdict
+    matchbytes = [bs[i:i + 8] for i in range(0, len(bs), 8)]
     freqs = defaultdict(lambda: 0)
     for match in matchbytes:
         freqs[match] += 1
@@ -14,8 +19,6 @@ def get_repetitions(bs):
 
 
 def detect_ecb(lines, mod=0):
-    if mod:
-        from xorgalor import scoreline
     scorez = []
     for line in lines:
         line = line.strip()
@@ -29,8 +32,6 @@ def detect_ecb(lines, mod=0):
 
 
 def decrypt_aes128ecb(bs, key):
-    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-    from cryptography.hazmat.backends import default_backend
     backend = default_backend()
     cipher = Cipher(algorithms.AES(key), modes.ECB(), backend=backend)
     decryptor = cipher.decryptor()
