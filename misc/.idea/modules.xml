@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../compresslearn/.idea/compresslearn.iml" filepath="$PROJECT_DIR$/../compresslearn/.idea/compresslearn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../pals/.idea/cryptopals.iml" filepath="$PROJECT_DIR$/../pals/.idea/cryptopals.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/misc.iml" filepath="$PROJECT_DIR$/.idea/misc.iml" />
+    </modules>
+  </component>
+</project>
