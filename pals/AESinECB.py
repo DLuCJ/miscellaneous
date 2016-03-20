@@ -21,7 +21,6 @@ def detect_ecb(lines, mod=0):
             scorez.append((scoreline(0, bs), line))
             continue
         scorez.append((get_repetitions(bs), line))
-    print(max(scorez, key=lambda item: item[0])[0])
     return max(scorez, key=lambda item: item[0])[1]
 
 
