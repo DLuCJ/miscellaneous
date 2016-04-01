@@ -1,0 +1,59 @@
+#!/usr/bin/perl
+#hsgrab
+#Author: Daniel Lu
+
+use strict;
+use warnings;
+use utf8;
+use LWP::Simple;
+
+#config data
+#quotemeta for regex compatibility
+my $Sub_Group = quotemeta "[foo]";
+my $Sig_Form = quotemeta "[bar]";
+
+my $Directory = "/home/dlu/Downloads/";
+my $URL = 'redacted';
+
+my @trimmed_entries = &parse_nyaa();
+
+foreach(@trimmed_entries) {
+        my @title = ($_=~ /(.*)($Sig_Form)/);
+        my $entry_name = join(" ",@title);
+        print "Get $entry_name? y/n: ";
+        my $input = <STDIN>;
+        chomp $input;
+        if ($input eq 'y') {
+                query($_, $entry_name);
+        } else {
+                next;
+        }
+}
+
+#send request to grab entry and save response file
+sub query {
+        my @query = ( $_[0] =~ /(?<=<link>)(.*)/);
+        my $query_url = join('',split('#38;',$query[0]));
+        my $file = "$Directory$_[1]\.torrent";
+        getstore($query_url, $file);
+        print "Saving:$file\n";
+}
+
+#grab RSS feed 
+sub parse_nyaa {
+        my $Content = ''.get($URL);
+        die "Couldn't get $URL" unless defined $Content;
+
+        #grab input with desired flags (i.e sub group, sig form), force unique entries
+        my @entries = ($Content =~ /((?<=$Sub_Group)(?s)(.*?)(?=<\/link>))/g);
+        @entries = grep { /$Sig_Form/ } @entries;
+        @entries = &uniq(@entries);
+
+        return @entries;
+}
+
+#find unique array elements
+sub uniq {
+        my %seen;
+        grep !$seen{$_}++, @_;
+}

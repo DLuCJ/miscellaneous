@@ -1,0 +1,33 @@
+Hello!
+This is the Infection program, written in python.  
+This is using python 3.5  It's untested with other versions.
+
+To run:
+   :$ python infection.py
+
+The main routine executes two sets of tests.
+
+All you should see as output is an "All tests pass" and then output from
+the limited_infection test listing users and versions, and the number
+of infected users.
+
+Thoughts are in doc-strings in the file.
+But feel free to ask if you need clarification on anything.
+
+
+NOTE:
+So, I was thinking about limited_infection a bit today, and I realize that 
+it's probably got a big problem.
+
+When I check if there are conflicts in prev's connection list, I actually
+mean that I want to check for conflicts in prev's entire reachable graph.
+So I suppose that I can change count_reachable to return a Counter instead,
+and have Counter hold both the list of reachable users and the count.
+
+Then, prev points to a (User, Counter) tuple and we can check the Counter's
+reachable users list for conflicts instead.
+
+But, I'm pretty sure I'm not supposed to make any changes to the code right now, 
+so this just a way for me to remember where I went wrong.
+
+But I'm pretty sure I'm not allowed to make any changes 

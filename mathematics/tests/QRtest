@@ -1,0 +1,39 @@
+This is SBCL 1.2.7, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+* 
+; loading #P"/home/dlu/slime/swank-loader.lisp"
+STYLE-WARNING: redefining EMACS-INSPECT (#<SB-PCL:SYSTEM-CLASS T>) in DEFMETHOD
+;; Swank started at port: 53089.
+53089
+* (ql:quickload :mathematics)
+To load "mathematics":
+  Load 1 ASDF system:
+    mathematics
+; Loading "mathematics"
+[package mathematics].
+(:MATHEMATICS)
+* (mth:QR '((1.0 1.0 3.0) (2.0 2.0 2.0) (3.0 1.0 1.0)) (mth:transpose '((1.0 1.0 3.0) (2.0 2.0 2.0) (3.0 1.0 1.0))))
+
+((0.08333333333333333 6.0 8.0) (0.0f0 0.125 12.0)
+ (0.0f0 0.0f0 0.08333333333333333))
+* 
+
+((0.2672612419124244 0.35856858280031806 -0.894427190999916)
+ (0.5345224838248488 0.7171371656006361 0.447213595499958)
+ (0.8017837257372732 -0.5976143046671969 0.0))
+* (mth:transpose (mth:modified-gram-schmidt '((1.0 1.0 3.0) (2.0 2.0 2.0) (3.0 1.0 1.0))))
+
+((0.2672612419124244 0.5345224838248488 0.8017837257372732)
+ (0.35856858280031806 0.7171371656006361 -0.5976143046671969)
+ (-0.894427190999916 0.447213595499958 0.0))
+* (mth:QR  '((1.0 1.0 3.0) (2.0 2.0 2.0) (3.0 1.0 1.0)) (mth:modified-gram-schmidt '((1.0 1.0 3.0) (2.0 2.0 2.0) (3.0 1.0 1.0))))
+
+((0.2672612419124244 2.138089935299395 2.672612419124244)
+ (0.0f0 0.8366600265340758 1.9123657749350298)
+ (0.0f0 0.0f0 -0.5590169943749473))
+*  

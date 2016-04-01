@@ -1,0 +1,19 @@
+all: test
+
+TARGET = test
+CFLAGS =-I.
+INCLUDES = dlist.h hash.h
+OBJECTS = dlist.o hash.o test.o 
+
+CC = gcc -g  
+
+%.o: %.c $(INCLUDES)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(TARGET): $(OBJECTS)
+	$(CC) -o $@ $^ $(CFLAGS) 
+	./test > log
+	diff log log.gold
+
+clean:
+	rm $(TARGET) *.o *~

@@ -1,0 +1,17 @@
+all: test
+
+TARGET = test
+CFLAGS =-I.
+INCLUDES = hash.h
+OBJECTS = hash.o test.o 
+
+CC = gcc -g  
+
+%.o: %.c $(INCLUDES)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(TARGET): $(OBJECTS)
+	$(CC) -o $@ $^ $(CFLAGS) 
+		
+clean:
+	rm $(TARGET) *.o *~

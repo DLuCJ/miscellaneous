@@ -1,0 +1,43 @@
+
+cypher
+
+Author: Daniel Lu
+email: dizzylu@gmail.com
+
+
+###################### Description ##########################
+
+This program accepts a text stream from stdin one character at a time. 
+It outputs an encrypted/decrypted stream to stdout one character at a time. 
+
+The encryption is done using a key provided as an argument to the program.  
+Encryption/decryption is specified with an 'e' or 'd' argument, respectively. 
+
+To build: 
+~$ make
+
+To compile/link app:
+~$ make cypher
+
+To remove build rifraff:
+~$ make clean
+
+To remove build rifraff and executable:
+~$ make clobber
+
+To archive contents:
+~$ make archive
+
+To test:
+~$ make test
+
+Usage:
+to encrypt: ./cypher e <key>
+to decrypt: ./cypher d <key>
+
+File list:
+cypher.c 
+cypher.h
+makefile
+README
+test.sh 

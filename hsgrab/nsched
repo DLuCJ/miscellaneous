@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+#hsched
+#Author: Daniel Lu
+
+use strict;
+use warnings;
+use LWP::Simple;
+
+my $url = 'redacted';
+my @time_data = &parse_timepage();
+
+my %time_hash;
+
+foreach(@time_data) {
+        my @title = ($_=~ /(.*)(?=<span)/);
+        my @time = ($_=~ /(?<="release-time">)(.*)/);
+        $time_hash{$title[0]} = join('',split(':',$time[0]));
+}
+
+print "Times: \n\n";
+
+# print sorted times 
+foreach my $key ( sort hash_val_ascending (keys(%time_hash))) {
+        print "$time_hash{$key}: $key\n";
+}
+
+# sorting helper method
+sub hash_val_ascending {
+        $time_hash{$a} <=> $time_hash{$b};
+}
+
+# grab time table
+sub parse_timepage {
+    my $data = get($url);
+    die "Couldn't get $url" unless defined $data;
+
+    #grab desired input fields
+    my @releases = ($data =~ /((?<=today-releases)(?s)(.*?)(?=<\/li>))/g);
+    my $release_data = $releases[0];
+    my @times = ($release_data =~ /((?<="series-name">)(?s)(.*?)(?=<\/span>))/g);
+
+    @times = &uniq(@times);
+
+    return @times;
+}
+
+# find unique array elements
+sub uniq {
+        my %seen;
+        grep !$seen{$_}++, @_;
+}
+

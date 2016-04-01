@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# lazytv
+# Author: Daniel Lu
+
+Directory="/home/dlu/Downloads/"
+FORMATS="*.torrent"
+
+cd $Directory
+
+for file in $FORMATS; do
+    $(nohup deluge "$file") &
+done
+
+wait 
+
+exit 0
