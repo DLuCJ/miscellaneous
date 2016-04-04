@@ -13,6 +13,9 @@ vec4 opU( vec4 t1, vec4 t2 )
 {
     if (t1.w > t2.w && t2.w < 0.0)
         return t1;
+  
+    if (t1.w < t2.w && t1.w > 0.0)
+        return t1;
     
 	return t2;
 }
