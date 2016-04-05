@@ -1,3 +1,17 @@
+//Anti-aliasing with 100 samples
+
+#define AAiter 100
+
+float rand(in vec2 co)
+{
+    highp float a = 12.9898;
+    highp float b = 78.233;
+    highp float c = 43758.5453;
+    highp float dt= dot(co.xy ,vec2(a,b));
+    highp float sn= mod(dt,3.14);
+    return fract(sin(sn) * c);
+}
+
 struct Ray
 {
     vec3 o;
@@ -17,7 +31,7 @@ vec4 opU( vec4 t1, vec4 t2 )
     if (t1.w < t2.w && t1.w > 0.0)
         return t1;
     
-	return t2;
+    return t2;
 }
 
 vec4 idSphere(vec3 center, float radius, Ray r, float tmin, float tmax)
@@ -31,17 +45,17 @@ vec4 idSphere(vec3 center, float radius, Ray r, float tmin, float tmax)
     float q = -0.5 * (b + sqrt(discriminant));
     
     if (discriminant > 0.0) {
-        float temp = q / a;
-        if (temp < tmax && temp > tmin ) {
-        	return vec4(normalize(vec3(point(r.o, r.d, temp) - center)), temp);
+        float t = q / a;
+        if (t < tmax && t > tmin ) {
+        	return vec4(normalize(vec3(point(r.o, r.d, t) - center)), t);
         }
         
-        temp = c / q;
-        if (temp < tmax && temp > tmin) {
-            return vec4(normalize(vec3(point(r.o, r.d, temp) - center)), temp);  
+        t = c / q;
+        if (t < tmax && t > tmin) {
+            return vec4(normalize(vec3(point(r.o, r.d, t) - center)), t);  
         }
     }
-	return vec4(vec3(-1.0,-1.0,1.0), -1.0);
+    return vec4(vec3(-1.0,-1.0,1.0), -1.0);
 }
 
 vec4 map(Ray r, float tmin, float tmax)
@@ -57,7 +71,7 @@ vec4 castRay(Ray r)
     float tmax = 1.0/0.0;
     vec4 hit;
     hit = map(r, tmin, tmax);
-	return hit;    
+    return hit;    
 }
 
 vec3 render(Ray r)
@@ -68,25 +82,34 @@ vec3 render(Ray r)
         return 0.5*(hit.xyz + vec3(1.0, 1.0, 1.0));
     }
     vec3 unit_direction = normalize(r.d);
-   	t = 0.5 * (unit_direction.y + 1.0);
+    t = 0.5 * (unit_direction.y + 1.0);
     return mix(vec3(1.0, 1.0, 1.0), vec3(0.5, 0.7, 1.0), t);
 }
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-	vec2 uv = fragCoord.xy / iResolution.xy;
-      
+    int ns = AAiter;
+    
+    vec2 uv = fragCoord.xy / iResolution.xy;
+    vec2 seed = vec2(fragCoord.x * cos(iGlobalTime), fragCoord.y * sin(iGlobalTime));
+    
   	vec3 lower_left_corner = vec3(-2.0, -1.0, -1.0);
   	vec3 horizontal = vec3(4.0, 0.0, 0.0);
   	vec3 vertical = vec3(0.0, 2.25, 0.0);
   	vec3 origin = vec3(0.0, 0.0, 0.0);
     
-    vec3 col;
+    vec3 col = vec3(0.0,0.0,0.0);
     
-    Ray r;
-    r.o = origin; 
-    r.d = lower_left_corner + uv.x*horizontal + uv.y*vertical;
+    for (int i = 0; i < AAiter; i++) {
+        
+        vec2 uv2 = uv.xy + (vec2(rand(seed),rand(seed)) / iResolution.xy);
+    	Ray r;
+        r.o = 0.25*sin(iGlobalTime)+origin; 
+        r.d = lower_left_corner + uv2.x*horizontal + uv2.y*vertical;
+        col += render(r);
     
-    col = render(r);
-	fragColor = vec4(col,1.0);
+    }
+    col /= float(ns);
+    
+    fragColor = vec4(col,1.0);
 }
