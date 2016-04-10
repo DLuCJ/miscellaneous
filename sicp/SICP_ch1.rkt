@@ -67,3 +67,42 @@
           (else (expt-iter (- xpt 1) base (* a base)))))
   (expt-iter n b 1))
 
+(define (sd-mul x y)  ; x_1 + x_2 + ... + x_y
+  (define (double n) (+ n n))
+  (define (halve n) (/ n 2))
+  (define (mul-iter num times a)  
+    (cond ((= times 0) a)
+          ((= (remainder times 2) 0)
+           (mul-iter (double num) (halve times) a))
+          (else (mul-iter num (- times 1) (+ a num)))))
+  (mul-iter x y 0))
+
+(define (fib n)
+  (fib-iter 1 0 0 1 n))
+
+(define (fib-iter a b p q count)
+  (cond ((= count 0) b)
+        ((even? count)
+         (fib-iter a
+                   b
+                   (+ (sqr q) (sqr p))
+                   (+ (* 2 q p) (sqr q))
+                   (/ count 2)))
+        (else (fib-iter (+ (* b q) (* a q) (* a p))
+                        (+ (* b p) (* a q))
+                        p
+                        q
+                        (- count 1)))))
+
+(define (test-fib n)
+  (define (fib-iter a b count)
+    (if (= count 0)
+        b
+        (fib-iter (+ a b) a (- count 1))))
+  (fib-iter 1 0 n))
+
+(define (assertfib n)
+  (cond ((= n 0) #t)
+        ((not (= (fib n) (test-fib n))) #f)
+        (else (assertfib (- n 1)))))
+                
