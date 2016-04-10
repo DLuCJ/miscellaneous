@@ -58,3 +58,12 @@
 ; note: 1p13 , prove by expanding out fib(n+1) = fib(n) + fib(n-1)
 ; into the corresponding phi / psi expressions
 ; to show equality
+
+(define (ss-expt b n) ; base b, exponent n
+  (define (expt-iter xpt base a)
+    (cond ((= xpt 0) a)
+          ((= (remainder xpt 2) 0)
+           (expt-iter (/ xpt 2) (sqr base) a))
+          (else (expt-iter (- xpt 1) base (* a base)))))
+  (expt-iter n b 1))
+
